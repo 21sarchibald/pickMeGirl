@@ -1,9 +1,24 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from 'expo-image-picker';
 import { useState } from 'react';
 import { Button, Image, StyleSheet, View } from 'react-native';
 
 export default function AddOutFitPhoto() {
     const [image, setImage] = useState<string | null>(null);
+    const [showOptions, setShowOptions] = useState(false);
+
+    const addImage = async (uri: string) => {
+        try {
+            const currentOutfitPhotos = await AsyncStorage.getItem('outfitPhotos');
+            const photoList = currentOutfitPhotos ? JSON.parse(currentOutfitPhotos) : [];
+            photoList.push(uri);
+            await AsyncStorage.setItem('outfitPhotos', JSON.stringify(photoList));
+        }
+        catch (error) {
+            console.error('Error saving photo', error);
+        }
+        
+    };
 
 
     const pickFromGallery = async () => {
@@ -19,7 +34,10 @@ export default function AddOutFitPhoto() {
         });
 
         if (!result.canceled) {
-            setImage(result.assets[0].uri);
+            const uri = result.assets[0].uri;
+            setImage(uri);
+            await addImage(uri);
+            setShowOptions(false);
         }
     };
 
@@ -35,15 +53,28 @@ const takePhoto = async () => {
     });
 
     if (!result.canceled) {
-        setImage(result.assets[0].uri);
+        const uri = result.assets[0].uri;
+        setImage(uri);
+        await addImage(uri);
+        setShowOptions(false);
     }
-};
+
+    };
 
 return (
     <View style={styles.container}>
-        <Button title="Take Photo" onPress={takePhoto} />
-        <View style={{ height: 10}} />
-        <Button title="Pick from Gallery" onPress={pickFromGallery} />
+        <Button title="Add Photo" onPress={() => setShowOptions(!showOptions)} />
+
+        {showOptions && (
+            <>
+            <View style={{ height: 10}} />
+            <Button title="Take Photo" onPress={takePhoto} />
+            <View style={{ height: 10}} />
+            <Button title="Pick from Gallery" onPress={pickFromGallery} /></>
+        )
+    
+        }
+        
         
         {image && (
             <Image
