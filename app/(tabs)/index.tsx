@@ -30,11 +30,11 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 8
+    gap: 8,
   },
   title: {
     fontWeight: 'bold',
-    fontSize: 18,
+    fontSize: 50,
   },
   card: {
     backgroundColor: '#eee',
@@ -50,7 +50,6 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: 'CoveredByYourGrace',
-    fontSize: 50,
     color: 'white'
   },
 }
