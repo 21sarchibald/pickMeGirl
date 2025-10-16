@@ -18,21 +18,16 @@ export default function HomeScreen() {
 
       </SafeAreaView>
 
-      <SafeAreaView style={styles.card}>
-        <Text style={[styles.text, {color: 'darkblue'}]}>Card on the page! Oh yeah!</Text>
-      </SafeAreaView>
-
     </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
   titleContainer: {
-    // flexDirection: 'row',
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 8,
+    margin: 30
   },
   title: {
     fontWeight: 'bold',

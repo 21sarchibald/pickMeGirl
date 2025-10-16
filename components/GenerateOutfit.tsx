@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
-import { Button, Image, StyleSheet, View } from 'react-native';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 
 export default function GenerateOutfit() {
     const [image, setImage] = useState<string | null>(null);
@@ -29,7 +29,9 @@ export default function GenerateOutfit() {
 return (
     <View style={styles.container}>
         {image && <Image source={{ uri: image }} style={styles.image}/>}
-        <Button title="Pick my outfit for me" onPress={generateRandomPhoto} />
+        <Pressable onPress={generateRandomPhoto} >
+            <Text style={styles.button}>Pick my outfit for me</Text>
+        </Pressable>
         </View>
     );
 }
@@ -44,4 +46,9 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         marginTop: 20,
     },
+    button: {
+        backgroundColor: 'white',
+        padding: 10,
+        borderRadius: 5,
+    }
 });
