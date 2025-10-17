@@ -30,7 +30,7 @@ return (
     <View style={styles.container}>
         {image && <Image source={{ uri: image }} style={styles.image}/>}
         <Pressable onPress={generateRandomPhoto} >
-            <Text style={styles.button}>Pick my outfit for me</Text>
+            <Text style={styles.button}>Pick my outfit</Text>
         </Pressable>
         </View>
     );
@@ -39,12 +39,13 @@ return (
 
 
 const styles = StyleSheet.create({
-    container: { alignItems: 'center', padding: 20 },
+    container: { alignItems: 'center', padding: 20, height: 375 },
     image: {
-        width: 200,
-        height: 200,
+        width: 300,
+        height: 300,
         borderRadius: 10,
         marginTop: 20,
+        padding: 20
     },
     button: {
         backgroundColor: 'white',

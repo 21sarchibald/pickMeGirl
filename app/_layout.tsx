@@ -24,7 +24,7 @@ export default function RootLayout() {
     ...DarkTheme,
     colors: {
       ...DarkTheme.colors,
-      background: "black",
+      background: "#1e1e1e",
       card: "black",
       text: "white",
     },
@@ -34,7 +34,7 @@ export default function RootLayout() {
     ...DefaultTheme, 
     colors: {
       ...DefaultTheme.colors,
-      background: "black",
+      background: "#1e1e1e",
       card: "black",
       text: "white",
     }

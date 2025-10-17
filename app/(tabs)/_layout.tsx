@@ -16,7 +16,7 @@ export default function TabLayout() {
         headerShown: false,
         tabBarButton: HapticTab,
         tabBarStyle: {
-          backgroundColor: '#9EA3F5',
+          backgroundColor: '#C5C8F9',
           height: 100,
         },
         tabBarItemStyle: {
@@ -25,11 +25,14 @@ export default function TabLayout() {
           padding: 10,
         },
         tabBarIconStyle: {
-          marginTop: 10,
+          marginTop: 5,
         },
         tabBarLabelStyle: {
           fontSize: 20,
           fontWeight: '600',
+          marginTop: 5,
+          fontFamily: 'CoveredByYourGrace',
+
         }
       }}>
       <Tabs.Screen

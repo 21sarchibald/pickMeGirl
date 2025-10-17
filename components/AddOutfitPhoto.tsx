@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from 'expo-image-picker';
 import { useState } from 'react';
-import { Button, Image, StyleSheet, View } from 'react-native';
+import { Button, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export default function AddOutFitPhoto() {
     const [image, setImage] = useState<string | null>(null);
@@ -62,18 +62,25 @@ const takePhoto = async () => {
     };
 
 return (
-    <View style={styles.container}>
+    <View style={styles.addPhotoContainer}>
         <Button title="Add Photo" onPress={() => setShowOptions(!showOptions)} />
 
         {showOptions && (
-            <>
-            <View style={{ height: 10}} />
-            <Button title="Take Photo" onPress={takePhoto} />
-            <View style={{ height: 10}} />
-            <Button title="Pick from Gallery" onPress={pickFromGallery} /></>
-        )
-    
-        }
+            <View style={styles.optionsContainer}>
+                {/* <View style={{ height: 10}} /> */}
+            <TouchableOpacity style={styles.button} onPress={takePhoto}>
+                <Text style={styles.buttonText}>TAKE NEW PHOTO</Text>
+            </TouchableOpacity>
+            
+            {/* <View style={{ height: 10}} /> */}
+            <TouchableOpacity style={styles.button} onPress={pickFromGallery}>
+                <Text style={styles.buttonText}>PICK FROM GALLERY</Text>
+            </TouchableOpacity>
+            {/* <Button title="Take New Photo" onPress={takePhoto} /> */}
+            
+            {/* <Button title="Pick from Gallery" onPress={pickFromGallery} /> */}
+            </View>
+        )}
         
         
         {image && (
@@ -83,16 +90,30 @@ return (
             />
         )}
         </View>
-)
-
-}
+)};
 
 const styles = StyleSheet.create({
-    container: { alignItems: 'center', padding: 20 },
+    addPhotoContainer: { alignItems: 'center', padding: 20, height: 100 },
     image: {
         width: 200,
         height: 200,
         borderRadius: 10,
         marginTop: 20,
+        marginBottom: 20
     },
+    button: {
+        margin: 3,
+        backgroundColor: 'white',
+        height: 30,
+        padding: 7,
+        alignItems: 'center',
+        fontWeight: 'bold',
+    },
+    buttonText: {
+        fontWeight: 600,
+        color: '#3E4190'
+    },
+    optionsContainer: {
+        padding: 5,
+    }
 });
