@@ -7,11 +7,14 @@ export default function GenerateOutfit() {
 
     const generateRandomPhoto = async () => {
         try {
+
+            // Get outfit list from AsyncStorage.
             const photos = await AsyncStorage.getItem('outfitPhotos');
             if (!photos) return null;
             const outfits = JSON.parse(photos);
             if (outfits.length === 0) return null;
 
+            // Pick random outfit from the list then set the image property equal to the image uri.
             const randomNumber = Math.floor(Math.random() * outfits.length);
             setImage(outfits[randomNumber]);
         }
@@ -20,6 +23,7 @@ export default function GenerateOutfit() {
         }
     }
 
+    // Add a random photo to the homescreen when it loads.
     useEffect(() => {
         generateRandomPhoto();
     }, []);
@@ -29,6 +33,8 @@ export default function GenerateOutfit() {
 return (
     <View style={styles.container}>
         {image && <Image source={{ uri: image }} style={styles.image}/>}
+
+        {/* Generate a new photo every time the user presses the "pick my outfit" button. */}
         <Pressable onPress={generateRandomPhoto} >
             <Text style={styles.button}>Pick my outfit</Text>
         </Pressable>

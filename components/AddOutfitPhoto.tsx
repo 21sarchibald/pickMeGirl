@@ -9,9 +9,14 @@ export default function AddOutFitPhoto() {
 
     const addImage = async (uri: string) => {
         try {
+            // Get the current outfit photo list from AsyncStorage
             const currentOutfitPhotos = await AsyncStorage.getItem('outfitPhotos');
             const photoList = currentOutfitPhotos ? JSON.parse(currentOutfitPhotos) : [];
+
+            // Add the photo uri to the list.
             photoList.push(uri);
+
+            // Re-store the list into AsyncStorage.
             await AsyncStorage.setItem('outfitPhotos', JSON.stringify(photoList));
         }
         catch (error) {
@@ -23,6 +28,8 @@ export default function AddOutFitPhoto() {
 
     const pickFromGallery = async () => {
         const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        
+        // Warn the user if the app does not have access to their phone gallery.
         if (!permission.granted) {
             alert('Permission required to access photos!');
             return;
@@ -33,6 +40,7 @@ export default function AddOutFitPhoto() {
             quality: 1,
         });
 
+        // If there is access to the Gallery, set the image, add it to the Gallery, then unset the image.
         if (!result.canceled) {
             const uri = result.assets[0].uri;
             setImage(uri);
@@ -43,6 +51,8 @@ export default function AddOutFitPhoto() {
 
 const takePhoto = async () => {
     const permission = await ImagePicker.requestCameraPermissionsAsync();
+    
+    // Warn the user if the app doesn't have access to the camera.
     if (!permission.granted) {
         alert('Permission required to use camera!');
         return;
@@ -52,6 +62,7 @@ const takePhoto = async () => {
         quality: 1,
     });
 
+    // If there is access to the camera, set the image, add it to the Gallery, then unset the image.
     if (!result.canceled) {
         const uri = result.assets[0].uri;
         setImage(uri);
@@ -65,34 +76,37 @@ const takePhoto = async () => {
 
 return (
     <View style={styles.addPhotoContainer}>
-        <Button title="Add Photo" onPress={() => setShowOptions(!showOptions)} />
 
+{/* Display two options for adding a new photo to the app 
+(taking a new photo or picking from the gallery). */}
+        <Button title="Add Photo" onPress={() => setShowOptions(!showOptions)} />
+            
         {showOptions && (
             <View style={styles.optionsContainer}>
-                {/* <View style={{ height: 10}} /> */}
+
             <TouchableOpacity style={styles.button} onPress={takePhoto}>
                 <Text style={styles.buttonText}>TAKE NEW PHOTO</Text>
             </TouchableOpacity>
             
-            {/* <View style={{ height: 10}} /> */}
+
             <TouchableOpacity style={styles.button} onPress={pickFromGallery}>
                 <Text style={styles.buttonText}>PICK FROM GALLERY</Text>
             </TouchableOpacity>
             </View>
         )}
         
-        
+{/* Display image and confirmation message that it has been added to the app. */}
         {image && (
             <Modal transparent style={styles.modal}>
-            <View style={styles.modalBackground}>
-            <View style={styles.modalContent}>
-            <Image
-            source={{ uri: image }}
-            style={styles.image}
-            />
-            <Text style={styles.confirmationMessage}>Outfit added!</Text>
-            </View>
-            </View>
+                <View style={styles.modalBackground}>
+                    <View style={styles.modalContent}>
+                        <Image
+                            source={{ uri: image }}
+                            style={styles.image}
+                        />
+                        <Text style={styles.confirmationMessage}>Outfit added!</Text>
+                    </View>
+                </View>
             </Modal>
         )}
         </View>
