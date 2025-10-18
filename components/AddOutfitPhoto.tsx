@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from 'expo-image-picker';
 import { useState } from 'react';
-import { Button, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Button, Image, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export default function AddOutFitPhoto() {
     const [image, setImage] = useState<string | null>(null);
@@ -57,6 +57,8 @@ const takePhoto = async () => {
         setImage(uri);
         await addImage(uri);
         setShowOptions(false);
+        setTimeout(() => {
+            setImage(null)}, 2000);
     }
 
     };
@@ -76,18 +78,22 @@ return (
             <TouchableOpacity style={styles.button} onPress={pickFromGallery}>
                 <Text style={styles.buttonText}>PICK FROM GALLERY</Text>
             </TouchableOpacity>
-            {/* <Button title="Take New Photo" onPress={takePhoto} /> */}
-            
-            {/* <Button title="Pick from Gallery" onPress={pickFromGallery} /> */}
             </View>
         )}
         
         
         {image && (
+            <Modal transparent style={styles.modal}>
+            <View style={styles.modalBackground}>
+            <View style={styles.modalContent}>
             <Image
             source={{ uri: image }}
             style={styles.image}
             />
+            <Text style={styles.confirmationMessage}>Outfit added!</Text>
+            </View>
+            </View>
+            </Modal>
         )}
         </View>
 )};
@@ -115,5 +121,27 @@ const styles = StyleSheet.create({
     },
     optionsContainer: {
         padding: 5,
+    },
+    confirmationMessage: {
+        color: 'black',
+        fontWeight: 'bold',
+        padding: 10,
+    },
+    modal: {
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    modalBackground: {
+        backgroundColor: 'rgba(0, 0, 0, 0.75)',
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    modalContent: {
+        backgroundColor: '#C5C8F9',
+        width: '50%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 20,
     }
 });
