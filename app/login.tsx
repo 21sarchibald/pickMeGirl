@@ -1,7 +1,7 @@
+import { router } from 'expo-router';
+import { signInWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-
-import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebaseConfig";
 
 
@@ -56,6 +56,10 @@ return (
                 <Text style={styles.buttonText}>LOGIN</Text>
         </TouchableOpacity>
         </View>
+        <Text style={{ color: 'white' }}>Don&apos;t have an account?</Text>
+        <TouchableOpacity onPress={() => router.replace('/register')}>
+            <Text style={{ color: '#C5C8F9', marginTop: 10, fontSize: 15 }}>Register here!</Text>
+        </TouchableOpacity>
     </View>
 );
 
@@ -71,7 +75,7 @@ const styles = StyleSheet.create({
     },
     input: {
       height: 50,
-      width: '70%',
+      width: '80%',
       backgroundColor: '#C5C8F9',
       margin: 10,
       color: 'black',
