@@ -56,7 +56,7 @@ return (
                 <Text style={styles.buttonText}>LOGIN</Text>
         </TouchableOpacity>
         </View>
-        <Text style={{ color: 'white' }}>Don&apos;t have an account?</Text>
+        <Text style={{ color: 'white' }}>{`Don't have an account?`}</Text>
         <TouchableOpacity onPress={() => router.replace('/register')}>
             <Text style={{ color: '#C5C8F9', marginTop: 10, fontSize: 15 }}>Register here!</Text>
         </TouchableOpacity>
