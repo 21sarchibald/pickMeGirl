@@ -1,29 +1,48 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import firestore from '@react-native-firebase/firestore';
 import * as ImagePicker from 'expo-image-picker';
 import { useState } from 'react';
-import { Button, Image, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Button, Image, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { auth } from "../firebaseConfig";
 
 export default function AddOutFitPhoto() {
+    const userID = auth.currentUser?.uid
     const [image, setImage] = useState<string | null>(null);
+    const [description, setDescription] = useState('');
+    const [category, setCategory] = useState('');
     const [showOptions, setShowOptions] = useState(false);
+    const [showConfirmation, setShowConfirmation] = useState(false);
 
-    const addImage = async (uri: string) => {
-        try {
-            // Get the current outfit photo list from AsyncStorage
-            const currentOutfitPhotos = await AsyncStorage.getItem('outfitPhotos');
-            const photoList = currentOutfitPhotos ? JSON.parse(currentOutfitPhotos) : [];
+    const addImage = () => {
+        firestore().collection("users").doc(userID).collection("photos").add({
+            image: image,
+            description: description,
+            category: category,
+            timestamp: firestore.FieldValue.serverTimestamp()
+        })
+        setShowConfirmation(true);
+        setTimeout(() => {
+            setImage(null);
+            setShowConfirmation(false);
+        }, 2000);
+    }
 
-            // Add the photo uri to the list.
-            photoList.push(uri);
+    // const addImage = async (uri: string) => {
+    //     try {
+    //         // Get the current outfit photo list from AsyncStorage
+    //         const currentOutfitPhotos = await AsyncStorage.getItem('outfitPhotos');
+    //         const photoList = currentOutfitPhotos ? JSON.parse(currentOutfitPhotos) : [];
 
-            // Re-store the list into AsyncStorage.
-            await AsyncStorage.setItem('outfitPhotos', JSON.stringify(photoList));
-        }
-        catch (error) {
-            console.error('Error saving photo', error);
-        }
+    //         // Add the photo uri to the list.
+    //         photoList.push(uri);
+
+    //         // Re-store the list into AsyncStorage.
+    //         await AsyncStorage.setItem('outfitPhotos', JSON.stringify(photoList));
+    //     }
+    //     catch (error) {
+    //         console.error('Error saving photo', error);
+    //     }
         
-    };
+    // };
 
 
     const pickFromGallery = async () => {
@@ -44,7 +63,7 @@ export default function AddOutFitPhoto() {
         if (!result.canceled) {
             const uri = result.assets[0].uri;
             setImage(uri);
-            await addImage(uri);
+            // await addImage(uri);
             setShowOptions(false);
         }
     };
@@ -66,10 +85,9 @@ const takePhoto = async () => {
     if (!result.canceled) {
         const uri = result.assets[0].uri;
         setImage(uri);
-        await addImage(uri);
+
+        // await addImage(uri);
         setShowOptions(false);
-        setTimeout(() => {
-            setImage(null)}, 2000);
     }
 
     };
@@ -95,8 +113,35 @@ return (
             </View>
         )}
         
-{/* Display image and confirmation message that it has been added to the app. */}
         {image && (
+            <Modal transparent style={styles.modal}>
+                <View style={styles.modalBackground}>
+                    <View style={styles.modalContent}>
+                    <Image
+                            source={{ uri: image }}
+                            style={styles.image}
+                        />
+                    <TextInput
+                    placeholder='Outfit Description'
+                    value={description}
+                    onChangeText={setDescription}
+                    />
+                    <TextInput
+                    placeholder='Outfit Category'
+                    value={category}
+                    onChangeText={setCategory}
+                    />
+                    <TouchableOpacity style={styles.modalButton} onPress={addImage}>
+                        <Text style={styles.modalButtonText}>ADD PHOTO</Text>
+                    </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
+        )}
+
+
+{/* Display image and confirmation message that it has been added to the app. */}
+        {image && showConfirmation && (
             <Modal transparent style={styles.modal}>
                 <View style={styles.modalBackground}>
                     <View style={styles.modalContent}>
@@ -109,6 +154,7 @@ return (
                 </View>
             </Modal>
         )}
+
         </View>
 )};
 
@@ -157,5 +203,31 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 20,
-    }
+    },
+    input: {
+        height: 50,
+        width: '80%',
+        backgroundColor: '#C5C8F9',
+        margin: 10,
+        color: 'black',
+        borderRadius: 10,
+        padding: 5,
+      },
+      modalButton: {
+          margin: 15,
+          // backgroundColor: 'white',
+          padding: 7,
+          alignItems: 'center',
+          fontWeight: 'bold',
+          backgroundColor: '#3E4190',
+          borderRadius: 10,
+      },
+      modalButtonText: {
+          fontWeight: 600,
+          color: 'white',
+          paddingLeft: 10,
+          paddingRight: 10,
+          paddingTop: 5,
+          paddingBottom: 5,
+      },
 });
