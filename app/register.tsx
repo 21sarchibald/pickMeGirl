@@ -1,21 +1,36 @@
 import { router } from 'expo-router';
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, serverTimestamp, setDoc } from 'firebase/firestore';
 import React, { useState } from "react";
 import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { auth } from "../firebaseConfig";
+import { auth, db } from "../firebaseConfig";
 
 
 
 export default function RegisterScreen() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
 const handleRegistration = async () => {
+    
+    
     try {
         console.log("button works")
-        await createUserWithEmailAndPassword(auth, email, password);
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         console.log("Registration successful!");
         Alert.alert("Registration successful!");
+        
+        // Create user doc
+        const userID = userCredential.user.uid;
+        await setDoc(doc(db, "users", userID), {
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            timestamp: serverTimestamp()
+        })
+
+
     } catch (error: any) {
         console.error("Error registering new user", error.message);
         Alert.alert("Error registering new account", error.message);
@@ -40,6 +55,18 @@ return (
         Create New Account
     </Text>
         <TextInput 
+            placeholder="First name" 
+            onChangeText={setFirstName} 
+            value={firstName} 
+            style={ styles.input }
+            />
+        <TextInput 
+            placeholder="Last name" 
+            onChangeText={setLastName} 
+            value={lastName}
+            style={ styles.input }
+            />
+        <TextInput 
             placeholder="Email" 
             onChangeText={setEmail} 
             value={email} 
@@ -57,9 +84,9 @@ return (
                 <Text style={styles.buttonText}>REGISTER</Text>
         </TouchableOpacity>
         </View>
-        <Text style={{ color: 'white' }}>Don&apos;t have an account?</Text>
-        <TouchableOpacity onPress={() => router.replace('/register')}>
-            <Text style={{ color: '#C5C8F9', marginTop: 10, fontSize: 15 }}>Register here!</Text>
+        <Text style={{ color: 'white' }}>Already have an account?</Text>
+        <TouchableOpacity onPress={() => router.replace('/login')}>
+            <Text style={{ color: '#C5C8F9', marginTop: 10, fontSize: 15 }}>Login here!</Text>
         </TouchableOpacity>
     </View>
 );

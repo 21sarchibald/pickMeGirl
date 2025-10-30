@@ -16,6 +16,7 @@ const handleLogin = async () => {
         console.log("button works")
         await signInWithEmailAndPassword(auth, email, password);
         console.log("Login successful!");
+        router.replace("/(tabs)")
     } catch (error: any) {
         console.error("Error logging in", error.message);
     }

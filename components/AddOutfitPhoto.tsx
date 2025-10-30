@@ -1,8 +1,8 @@
-import firestore from '@react-native-firebase/firestore';
 import * as ImagePicker from 'expo-image-picker';
+import { addDoc, collection, doc, serverTimestamp } from "firebase/firestore";
 import { useState } from 'react';
 import { Button, Image, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { auth } from "../firebaseConfig";
+import { auth, db } from "../firebaseConfig";
 
 export default function AddOutFitPhoto() {
     const userID = auth.currentUser?.uid
@@ -11,14 +11,22 @@ export default function AddOutFitPhoto() {
     const [category, setCategory] = useState('');
     const [showOptions, setShowOptions] = useState(false);
     const [showConfirmation, setShowConfirmation] = useState(false);
+    console.log("Current user: ", userID)
 
-    const addImage = () => {
-        firestore().collection("users").doc(userID).collection("photos").add({
+    const addOutfit = async () => {
+        console.log("addOutfit button worked");
+        if (!userID) {
+            console.error("No user logged in");
+            return;
+        }
+        await addDoc(
+            collection(doc(db, "users", userID), "outfits"), {
             image: image,
             description: description,
             category: category,
-            timestamp: firestore.FieldValue.serverTimestamp()
+            timestamp: serverTimestamp()
         })
+        
         setShowConfirmation(true);
         setTimeout(() => {
             setImage(null);
@@ -131,8 +139,8 @@ return (
                     value={category}
                     onChangeText={setCategory}
                     />
-                    <TouchableOpacity style={styles.modalButton} onPress={addImage}>
-                        <Text style={styles.modalButtonText}>ADD PHOTO</Text>
+                    <TouchableOpacity style={styles.modalButton} onPress={addOutfit}>
+                        <Text style={styles.modalButtonText}>ADD OUTFIT</Text>
                     </TouchableOpacity>
                     </View>
                 </View>
