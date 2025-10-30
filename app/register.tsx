@@ -30,6 +30,7 @@ const handleRegistration = async () => {
             timestamp: serverTimestamp()
         })
 
+        router.replace("/(tabs)");
 
     } catch (error: any) {
         console.error("Error registering new user", error.message);
