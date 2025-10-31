@@ -26,6 +26,7 @@ export default function Gallery() {
   const userID = auth.currentUser?.uid
   
   const editOutfit = async (outfitId) => {
+    console.log("Image:", )
     console.log("Edit button worked");
     if (!userID) {
       console.log("No user logged in");
@@ -39,6 +40,7 @@ export default function Gallery() {
     }
       
     );
+    setSelectedOutfit(null);
   }
 
 
@@ -129,7 +131,7 @@ export default function Gallery() {
                     value={category}
                     onChangeText={setCategory}
                     />
-                    <TouchableOpacity style={styles.modalButton} onPress={() => editOutfit(selectedOutfit)}>
+                    <TouchableOpacity style={styles.modalButton} onPress={() => editOutfit(selectedOutfit.id)}>
                         <Text style={styles.modalButtonText}>EDIT OUTFIT</Text>
                     </TouchableOpacity>
                     </View>
