@@ -1,35 +1,70 @@
 // import { Image } from 'expo-image';
+import { auth, db } from '@/firebaseConfig';
 import { useFocusEffect } from '@react-navigation/native';
+import { collection, doc, onSnapshot } from 'firebase/firestore';
 import React, { useCallback, useState } from 'react';
 import { FlatList, Image, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
 export default function Gallery() {
-  const [outfits, setOutfits] = useState<string[]>([]);
 
-  async function fetchOutfits() {
-
-    // Retrieve stored outfit photos from AsyncStorage.
-    const storedOutfits = await AsyncStorage.getItem('outfitPhotos');
-    if (storedOutfits) {
-      const parsed = JSON.parse(storedOutfits);
-      setOutfits(JSON.parse(storedOutfits));
-      console.log(parsed);
-    }
-    else {
-      console.log('No outfits stored');
-    }
-
+  interface Outfit {
+    id: string;
+    image: string;
+    description: string;
+    category: string;
+    timestamp?: any;
   }
 
-  // Re-render the gallery when user navigates to that screen.
+  const [loading, setLoading] = useState(true);
+  const [outfits, setOutfits] = useState<Outfit[]>([]);
+  const user = auth.currentUser;
+
   useFocusEffect(
     useCallback(() => {
-    fetchOutfits();
-  },[])
+      if (!user) return;
+
+      const outfitsReference = collection(doc(collection(db, "users"), user.uid), "outfits");
+      const unsubscribe = onSnapshot(outfitsReference, (snapshot) => {
+        const outfits = snapshot.docs.map(doc => {
+        const data = doc.data();
+          return {
+          id: doc.id,
+          image: data.image,
+          description: data.description,
+          category: data.category,
+          timestamp: data.timestamp,
+        };
+      });
+        setOutfits(outfits);
+
+    });
+
+    return () => unsubscribe();
+  }, [user])
 );
+
+//   async function fetchOutfits() {
+
+//     // Retrieve stored outfit photos from AsyncStorage.
+//     const storedOutfits = await AsyncStorage.getItem('outfitPhotos');
+//     if (storedOutfits) {
+//       const parsed = JSON.parse(storedOutfits);
+//       setOutfits(JSON.parse(storedOutfits));
+//       console.log(parsed);
+//     }
+//     else {
+//       console.log('No outfits stored');
+//     }
+
+//   }
+
+//   // Re-render the gallery when user navigates to that screen.
+//   useFocusEffect(
+//     useCallback(() => {
+//     fetchOutfits();
+//   },[])
+// );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -38,7 +73,7 @@ export default function Gallery() {
       <FlatList
         data={outfits}
         renderItem={({ item }) => (
-          <Image source={{ uri: item }} style={styles.images} />
+          <Image source={{ uri: item.image }} style={styles.images} />
         )}
         keyExtractor={ (item, index) => index.toString()}
 

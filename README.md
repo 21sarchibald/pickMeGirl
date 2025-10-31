@@ -40,6 +40,7 @@ I found these websites useful in developing this software:
 * [GeeksforGeeks React Native Tutorial](https://www.geeksforgeeks.org/react-native/react-native-tutorial/)
 * [ChatGPT React Native App Development Help](https://chatgpt.com/c/68e42698-b9ac-8328-a7a6-7941fbe6f154)
 * [React Nativation useFocusEffect](https://reactnavigation.org/docs/use-focus-effect/)
+* [React Native Firestore Usage with Flatlist](https://rnfirebase.io/firestore/usage-with-flatlists)
 
 ## Future Work
 

@@ -16,9 +16,9 @@ const handleRegistration = async () => {
     
     
     try {
-        console.log("button works")
+        // console.log("button works")
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        console.log("Registration successful!");
+        // console.log("Registration successful!");
         Alert.alert("Registration successful!");
         
         // Create user doc
@@ -29,7 +29,8 @@ const handleRegistration = async () => {
             email: email,
             timestamp: serverTimestamp()
         })
-
+        
+        // Send user to the home screen once they are registered.
         router.replace("/(tabs)");
 
     } catch (error: any) {
@@ -41,9 +42,9 @@ const handleRegistration = async () => {
 return (
     <View style={styles.loginContainer}>
     
-    <Text style={ styles.text }>
+    {/* <Text style={ styles.text }>
         Welcome to
-    </Text>
+    </Text> */}
     
     <Text style={ styles.heading }>
         Pick Me Girl

@@ -25,9 +25,9 @@ const handleLogin = async () => {
 return (
     <View style={styles.loginContainer}>
     
-    <Text style={ styles.text }>
+    {/* <Text style={ styles.text }>
         Welcome to
-    </Text>
+    </Text> */}
     
     <Text style={ styles.heading }>
         Pick Me Girl
