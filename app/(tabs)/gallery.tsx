@@ -1,7 +1,7 @@
 // import { Image } from 'expo-image';
 import { auth, db } from '@/firebaseConfig';
 import { useFocusEffect } from '@react-navigation/native';
-import { collection, doc, onSnapshot, updateDoc } from 'firebase/firestore';
+import { collection, deleteDoc, doc, onSnapshot, updateDoc } from 'firebase/firestore';
 import React, { useCallback, useState } from 'react';
 import { FlatList, Image, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -42,6 +42,19 @@ export default function Gallery() {
     );
     setSelectedOutfit(null);
   }
+  const deleteOutfit = async (outfitId) => {
+    console.log("Image:", )
+    console.log("Edit button worked");
+    if (!userID) {
+      console.log("No user logged in");
+      return;
+    }
+    const outfitRef = doc(db, "users", userID, "outfits", outfitId)
+
+    await deleteDoc(outfitRef)
+      
+    setSelectedOutfit(null);
+  }
 
 
   useFocusEffect(
@@ -69,27 +82,6 @@ export default function Gallery() {
 
 );
 
-//   async function fetchOutfits() {
-
-//     // Retrieve stored outfit photos from AsyncStorage.
-//     const storedOutfits = await AsyncStorage.getItem('outfitPhotos');
-//     if (storedOutfits) {
-//       const parsed = JSON.parse(storedOutfits);
-//       setOutfits(JSON.parse(storedOutfits));
-//       console.log(parsed);
-//     }
-//     else {
-//       console.log('No outfits stored');
-//     }
-
-//   }
-
-//   // Re-render the gallery when user navigates to that screen.
-//   useFocusEffect(
-//     useCallback(() => {
-//     fetchOutfits();
-//   },[])
-// );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -133,6 +125,9 @@ export default function Gallery() {
                     />
                     <TouchableOpacity style={styles.modalButton} onPress={() => editOutfit(selectedOutfit.id)}>
                         <Text style={styles.modalButtonText}>EDIT OUTFIT</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.modalButton} onPress={() => deleteOutfit(selectedOutfit.id)}>
+                        <Text style={styles.modalButtonText}>DELETE OUTFIT</Text>
                     </TouchableOpacity>
                     </View>
                 </View>

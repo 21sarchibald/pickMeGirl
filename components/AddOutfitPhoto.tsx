@@ -27,31 +27,15 @@ export default function AddOutFitPhoto() {
             timestamp: serverTimestamp()
         })
         
+        setImage(null);
+        setCategory('');
+        setDescription('');
+
         setShowConfirmation(true);
         setTimeout(() => {
-            setImage(null);
             setShowConfirmation(false);
         }, 2000);
     }
-
-    // const addImage = async (uri: string) => {
-    //     try {
-    //         // Get the current outfit photo list from AsyncStorage
-    //         const currentOutfitPhotos = await AsyncStorage.getItem('outfitPhotos');
-    //         const photoList = currentOutfitPhotos ? JSON.parse(currentOutfitPhotos) : [];
-
-    //         // Add the photo uri to the list.
-    //         photoList.push(uri);
-
-    //         // Re-store the list into AsyncStorage.
-    //         await AsyncStorage.setItem('outfitPhotos', JSON.stringify(photoList));
-    //     }
-    //     catch (error) {
-    //         console.error('Error saving photo', error);
-    //     }
-        
-    // };
-
 
     const pickFromGallery = async () => {
         const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -149,14 +133,14 @@ return (
 
 
 {/* Display image and confirmation message that it has been added to the app. */}
-        {image && showConfirmation && (
+        {showConfirmation && (
             <Modal transparent style={styles.modal}>
                 <View style={styles.modalBackground}>
                     <View style={styles.modalContent}>
-                        <Image
+                        {/* <Image
                             source={{ uri: image }}
                             style={styles.image}
-                        />
+                        /> */}
                         <Text style={styles.confirmationMessage}>Outfit added!</Text>
                     </View>
                 </View>
