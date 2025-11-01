@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
     },
     modalContent: {
         backgroundColor: '#C5C8F9',
-        width: '50%',
+        width: '75%',
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 20,
@@ -199,7 +199,8 @@ const styles = StyleSheet.create({
     input: {
         height: 50,
         width: '80%',
-        backgroundColor: '#C5C8F9',
+        // backgroundColor: '#C5C8F9',
+        backgroundColor: 'white',
         margin: 10,
         color: 'black',
         borderRadius: 10,
